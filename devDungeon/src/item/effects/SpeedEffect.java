@@ -2,6 +2,7 @@ package item.effects;
 
 import core.Entity;
 import systems.EventScheduler;
+import core.components.*;
 
 /**
  * Provides a mechanism to apply a temporary speed increase effect to an entity within the game.
@@ -30,12 +31,18 @@ public class SpeedEffect {
    * the specified duration. The increase in speed is applied immediately, and its reversal will be
    * scheduled to occur after the duration expires.
    *
-   * <p>TODO: Implement the applySpeedEffect method to schedule the speed increase and its
-   * reversion.
-   *
    * @param target The entity to which the speed effect will be applied.
    */
   public void applySpeedEffect(Entity target) {
-    throw new UnsupportedOperationException("Method not implemented.");
+    
+    VelocityCompenent vc = target.fetch(VelocityCompenent.class).get();
+
+    vc.xVelocity(vc.xVelocity() + speedIncrease);
+    vc.xVelocity(vc.xVelocity() + speedIncrease);
+
+    EVENT_SCHEDULER.scheduleAction(() -> {
+      vc.xVelocity(vc.xVelocity() + speedIncrease);
+      vc.xVelocity(vc.xVelocity() + speedIncrease);
+    }, duration*1000);
   }
 }
